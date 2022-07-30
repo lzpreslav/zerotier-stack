@@ -1,0 +1,21 @@
+---
+version: "3.9"
+
+services:
+  zerotier:
+    image: zerotier/zerotier:${ZEROTIER_TAG:-latest}
+    container_name: zerotier
+    cap_add:
+      - NET_ADMIN
+      - SYS_ADMIN
+    command: ["${ZEROTIER_NETWORK:?Providing ZEROTIER_NETWORK is required.}"]
+    devices:
+      - /dev/net/tun
+    network_mode: host
+    volumes:
+      - ${ZEROTIER_VOLUME:-zerotier}:/var/lib/zerotier-one
+    restart: always
+    healthcheck:
+      disable: true
+volumes:
+  zerotier:
